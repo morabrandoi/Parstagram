@@ -33,7 +33,6 @@ public class PostDetailActivity extends AppCompatActivity {
         post = Parcels.unwrap(wrappedPost);
         Log.i(TAG, "Post caption: " + post.getDescription());
         bindView();
-
     }
 
     private void bindView() {

@@ -2,7 +2,6 @@ package com.example.parstagram;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,47 +13,47 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
-public class LoginActivity extends AppCompatActivity {
-    public static final String TAG = "LoginActivity";
+public class SignUpActivity extends AppCompatActivity {
+    private static final String TAG = "SignUpActivity";
     private EditText etUsername;
     private EditText etPassword;
-    private Button btnLogin;
+    private EditText etEmail;
     private Button btnSignUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        // Setting actionbar to be gone because it is ugly
-        getSupportActionBar().hide();
-
-        if (ParseUser.getCurrentUser() != null ){
-            goMainActivity();
-        }
+        setContentView(R.layout.activity_sign_up);
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
+        etEmail = findViewById(R.id.etEmail);
         btnSignUp = findViewById(R.id.btnSignUp);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "onClick login button");
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
-                loginUser(username, password);
-            }
-        });
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(intent);
+                ParseUser user = new ParseUser();
+                // Set core properties
+                user.setUsername(etUsername.getText().toString());
+                user.setPassword(etPassword.getText().toString());
+                user.setEmail(etEmail.getText().toString());
+
+                // Invoke signUpInBackground
+                user.signUpInBackground(new SignUpCallback() {
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            loginUser(etUsername.getText().toString(), etPassword.getText().toString());
+
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Something you put was not valid, please fix!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
-
 
     }
 
@@ -66,11 +65,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (e != null){
                     // TODO: Better error handling
                     Log.e(TAG, "Issue with login", e);
-                    Toast.makeText(LoginActivity.this, "Issue with login.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Issue with login.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 goMainActivity();
-                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
     }
