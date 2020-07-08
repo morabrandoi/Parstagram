@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.parstagram.EndlessRecyclerViewScrollListener;
 import com.example.parstagram.Post;
 import com.example.parstagram.HomeAdapter;
 import com.example.parstagram.R;
@@ -29,10 +30,13 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment {
     public static final String TAG = "PostsFragment";
+    public static final int QUERY_LIMIT = 10;
+
     private RecyclerView rvPosts;
     private SwipeRefreshLayout swipeContainer;
-    protected HomeAdapter adapter;
-    protected List<Post> allPosts;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private HomeAdapter adapter;
+    private List<Post> allPosts;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -52,30 +56,41 @@ public class HomeFragment extends Fragment {
         allPosts = new ArrayList<>();
         adapter = new HomeAdapter(getContext(), allPosts);
 
-        // Swipe Container stuffs
+        // Swipe Container Code
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeContainer.setRefreshing(true);
-                queryPosts();
+                queryPosts(0);
                 allPosts.clear();
 
             }
         });
 
-        // RecyclerView Stuffs
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+
+        // RecyclerView Code
         rvPosts = view.findViewById(R.id.rvPosts);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-        queryPosts();
+        rvPosts.setLayoutManager(layoutManager);
+        queryPosts(0); // Filling in rvPosts;
 
+        // Scroll Listener Code
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                queryPosts(page);
+            }
+        };
+        rvPosts.addOnScrollListener(scrollListener);
     }
 
-    protected void queryPosts() {
+    protected void queryPosts(int page) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(20); // Number of posts to query at a time
+        query.setSkip(QUERY_LIMIT * page);
+        query.setLimit(QUERY_LIMIT); // Number of posts to query at a time
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override
