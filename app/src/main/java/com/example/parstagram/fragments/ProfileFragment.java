@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.parstagram.Post;
 import com.example.parstagram.HomeAdapter;
+import com.example.parstagram.ProfileAdapter;
 import com.example.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -29,7 +30,7 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
     public static final String TAG = "Profile";
     private RecyclerView rvPosts;
-    protected HomeAdapter adapter;
+    protected ProfileAdapter adapter;
     protected List<Post> allPosts;
 
     public ProfileFragment() {}
@@ -45,8 +46,9 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvPosts = view.findViewById(R.id.rvPosts);
+
         allPosts = new ArrayList<>();
-        adapter = new HomeAdapter(getContext(), allPosts);
+        adapter = new ProfileAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         queryPosts();
