@@ -42,6 +42,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return posts.size();
     }
 
+    public void clear(){
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Post> posts){
+        this.posts.addAll(posts);
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvUsername;

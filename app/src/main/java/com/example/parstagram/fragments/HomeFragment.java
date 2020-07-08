@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     public static final String TAG = "PostsFragment";
     private RecyclerView rvPosts;
+    private SwipeRefreshLayout swipeContainer;
     protected HomeAdapter adapter;
     protected List<Post> allPosts;
 
@@ -46,12 +48,28 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvPosts = view.findViewById(R.id.rvPosts);
+        // Initializing class variables
         allPosts = new ArrayList<>();
         adapter = new HomeAdapter(getContext(), allPosts);
+
+        // Swipe Container stuffs
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeContainer.setRefreshing(true);
+                queryPosts();
+                allPosts.clear();
+
+            }
+        });
+
+        // RecyclerView Stuffs
+        rvPosts = view.findViewById(R.id.rvPosts);
         rvPosts.setAdapter(adapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         queryPosts();
+
     }
 
     protected void queryPosts() {
@@ -69,6 +87,7 @@ public class HomeFragment extends Fragment {
                 for (Post post : posts) {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
+                swipeContainer.setRefreshing(false);
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
             }
