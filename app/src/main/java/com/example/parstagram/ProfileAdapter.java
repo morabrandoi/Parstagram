@@ -15,11 +15,11 @@ import com.parse.ParseFile;
 
 import java.util.List;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
     private Context context;
     private List<Post> posts;
 
-    public PostsAdapter(Context context, List<Post> allPosts) {
+    public ProfileAdapter(Context context, List<Post> allPosts) {
         this.context = context;
         this.posts = allPosts;
     }

@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.parstagram.fragments.ComposeFragment;
-import com.example.parstagram.fragments.PostsFragment;
+import com.example.parstagram.fragments.HomeFragment;
 import com.example.parstagram.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment;
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
-                        fragment = new PostsFragment();
+                        fragment = new HomeFragment();
                         break;
                     case R.id.action_compose:
                         fragment = new ComposeFragment();

@@ -50,7 +50,6 @@ public class ComposeFragment extends Fragment {
     private Button btnSubmit;
     private File photoFile;
 
-
     public ComposeFragment() {
         // Required empty public constructor
     }
