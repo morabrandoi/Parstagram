@@ -54,8 +54,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     private void loginUser(String username, String password) {

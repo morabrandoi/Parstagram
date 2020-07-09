@@ -54,7 +54,6 @@ public class SignUpActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 
     private void loginUser(String username, String password) {

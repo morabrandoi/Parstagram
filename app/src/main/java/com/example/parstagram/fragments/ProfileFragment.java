@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.HomeAdapter;
@@ -22,6 +26,7 @@ import com.example.parstagram.ProfileAdapter;
 import com.example.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -33,10 +38,13 @@ import java.util.List;
  */
 public class ProfileFragment extends Fragment {
     public static final String TAG = "Profile";
+    public static final String USER_PFP_KEY = "profilePicture";
     private RecyclerView rvPosts;
     private Button btnLogOut;
-    protected ProfileAdapter adapter;
-    protected List<Post> allPosts;
+    private ImageView ivProfilePic;
+    private TextView tvUsername;
+    private ProfileAdapter adapter;
+    private List<Post> allPosts;
 
     public ProfileFragment() {}
 
@@ -66,10 +74,30 @@ public class ProfileFragment extends Fragment {
                 getActivity().finishAffinity();
 
                 startActivity(intent);
-
-
             }
         });
+
+        // Profile Pic
+        ivProfilePic = view.findViewById(R.id.ivProfilePic);
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseFile image = user.getParseFile(USER_PFP_KEY);
+        if (image != null) {
+            Glide.with(this).load(image.getUrl()).into(ivProfilePic);
+        }
+        else{
+            Glide.with(this).load("https://placedog.net/500/500").into(ivProfilePic);
+        }
+
+
+        ivProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "ClickedOnImage!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Username
+        tvUsername = view.findViewById(R.id.tvUsername);
 
         // Recycler View stuffs
         rvPosts = view.findViewById(R.id.rvPosts);
