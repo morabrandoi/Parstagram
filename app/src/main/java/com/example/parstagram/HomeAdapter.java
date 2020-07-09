@@ -2,7 +2,6 @@ package com.example.parstagram;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +68,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             super(itemView);
 
             tvUsername = itemView.findViewById(R.id.tvUsername);
-            ivImage = itemView.findViewById(R.id.ivImage);
+            ivImage = itemView.findViewById(R.id.ivProfilePic);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             llItem = itemView.findViewById(R.id.llItem);
         }

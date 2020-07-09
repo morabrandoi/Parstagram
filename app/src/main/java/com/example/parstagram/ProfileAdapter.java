@@ -52,7 +52,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             super(itemView);
 
             tvUsername = itemView.findViewById(R.id.tvUsername);
-            ivImage = itemView.findViewById(R.id.ivImage);
+            ivImage = itemView.findViewById(R.id.ivProfilePic);
             tvDescription = itemView.findViewById(R.id.tvDescription);
         }
 

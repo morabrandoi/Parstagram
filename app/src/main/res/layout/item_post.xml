@@ -17,7 +17,7 @@
         tools:text="Username" />
 
     <ImageView
-        android:id="@+id/ivImage"
+        android:id="@+id/ivProfilePic"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="centerCrop"

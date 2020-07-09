@@ -64,7 +64,6 @@ public class ComposeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         etDescription = view.findViewById(R.id.etDescription);
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         ivPostImage = view.findViewById(R.id.ivPostImage);
@@ -93,8 +92,6 @@ public class ComposeFragment extends Fragment {
 
             }
         });
-//        queryPosts();
-
     }
 
     private void launchCamera() {
@@ -124,10 +121,9 @@ public class ComposeFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                // RESIZE BITMAP, see section below
-
                 // Load the taken image into a preview
                 ivPostImage.setImageBitmap(takenImage);
+                ivPostImage.setVisibility(ImageView.VISIBLE);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }

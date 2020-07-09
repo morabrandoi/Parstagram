@@ -1,6 +1,8 @@
 package com.example.parstagram.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.parstagram.ComposeProfilePicActivity;
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.HomeAdapter;
@@ -30,6 +33,8 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +44,7 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
     public static final String TAG = "Profile";
     public static final String USER_PFP_KEY = "profilePicture";
+    public static final int PROFILE_PIC_REQUEST_CODE = 23;
     private RecyclerView rvPosts;
     private Button btnLogOut;
     private ImageView ivProfilePic;
@@ -69,10 +75,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 ParseUser.logOut();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
-
                 // Clears back stack when starting new login.
                 getActivity().finishAffinity();
-
                 startActivity(intent);
             }
         });
@@ -87,12 +91,11 @@ public class ProfileFragment extends Fragment {
         else{
             Glide.with(this).load("https://placedog.net/500/500").into(ivProfilePic);
         }
-
-
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "ClickedOnImage!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ComposeProfilePicActivity.class);
+                startActivityForResult(intent, PROFILE_PIC_REQUEST_CODE);
             }
         });
 
@@ -104,6 +107,34 @@ public class ProfileFragment extends Fragment {
         rvPosts.setAdapter(adapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         queryPosts();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PROFILE_PIC_REQUEST_CODE && resultCode == Activity.RESULT_OK)
+        {
+
+            ParseUser user = ParseUser.getCurrentUser();
+            ParseFile image = user.getParseFile(USER_PFP_KEY);
+            if (image != null) {
+                Glide.with(this).load(image.getUrl()).into(ivProfilePic);
+            }
+            else{
+                Glide.with(this).load("https://placedog.net/500/500").into(ivProfilePic);
+            }
+//            Drawable profilePic = Parcels.unwrap(data.getParcelableExtra("profilePic"));
+//            profilePic = data.getExtra;
+//                    BitmapDrawable
+//            ivProfilePic.setImageBitmap(profilePic);
+
+        }
+        else {
+            Toast.makeText(getActivity(), "DEAR GOD I HOPE I DONT SEE THIS", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void queryPosts() {
@@ -127,4 +158,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+
 }
