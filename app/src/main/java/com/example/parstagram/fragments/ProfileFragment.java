@@ -2,7 +2,6 @@ package com.example.parstagram.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.example.parstagram.ComposeProfilePicActivity;
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.Post;
-import com.example.parstagram.HomeAdapter;
 import com.example.parstagram.ProfileAdapter;
 import com.example.parstagram.R;
 import com.parse.FindCallback;
@@ -32,8 +29,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +96,7 @@ public class ProfileFragment extends Fragment {
 
         // Username
         tvUsername = view.findViewById(R.id.tvUsername);
+        tvUsername.setText(user.getUsername());
 
         // Recycler View stuffs
         rvPosts = view.findViewById(R.id.rvPosts);

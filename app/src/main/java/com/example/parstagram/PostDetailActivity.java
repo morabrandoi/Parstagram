@@ -39,7 +39,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvUsername = findViewById(R.id.tvUsername);
         tvDescription = findViewById(R.id.tvDescription);
         tvTimeStamp = findViewById(R.id.tvTimeStamp);
-        ivImage = findViewById(R.id.ivProfilePic);
+        ivImage = findViewById(R.id.ivPostImage);
 
         tvUsername.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());

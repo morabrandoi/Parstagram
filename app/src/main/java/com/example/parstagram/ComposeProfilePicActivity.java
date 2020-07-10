@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +23,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import org.parceler.Parcels;
 
 import java.io.File;
 
@@ -52,7 +49,7 @@ public class ComposeProfilePicActivity extends AppCompatActivity {
         btnCaptureImage = findViewById(R.id.btnCaptureImage);
         btnChooseImage = findViewById(R.id.btnChooseImage);
         btnDone = findViewById(R.id.btnDone);
-        ivProfilePic = findViewById(R.id.ivProfilePic);
+        ivProfilePic = findViewById(R.id.ivPostImage);
         tvAddImage = findViewById(R.id.tvAddImage);
 
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {

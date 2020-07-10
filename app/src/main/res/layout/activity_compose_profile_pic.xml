@@ -14,7 +14,7 @@
         android:text="Add Image"
         android:textAllCaps="false"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/ivProfilePic"
+        app:layout_constraintBottom_toTopOf="@+id/ivPostImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
