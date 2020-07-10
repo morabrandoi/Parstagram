@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment {
     public static final int NUM_COLUMN = 3;
     private RecyclerView rvPosts;
     private Button btnLogOut;
-    private ImageView ivProfilePic;
+    private ImageView ivProfileProfilePic;
     private TextView tvUsername;
     private ProfileAdapter adapter;
     private List<Post> allPosts;
@@ -79,16 +79,16 @@ public class ProfileFragment extends Fragment {
         });
 
         // Profile Pic
-        ivProfilePic = view.findViewById(R.id.ivProfilePic);
+        ivProfileProfilePic = view.findViewById(R.id.ivProfileProfilePic);
         ParseUser user = ParseUser.getCurrentUser();
         ParseFile image = user.getParseFile(USER_PFP_KEY);
         if (image != null) {
-            Glide.with(this).load(image.getUrl()).into(ivProfilePic);
+            Glide.with(this).load(image.getUrl()).into(ivProfileProfilePic);
         }
         else{
-            Glide.with(this).load("https://placedog.net/500/500").into(ivProfilePic);
+            Glide.with(this).load("https://placedog.net/500/500").into(ivProfileProfilePic);
         }
-        ivProfilePic.setOnClickListener(new View.OnClickListener() {
+        ivProfileProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ComposeProfilePicActivity.class);
@@ -118,10 +118,10 @@ public class ProfileFragment extends Fragment {
             ParseUser user = ParseUser.getCurrentUser();
             ParseFile image = user.getParseFile(USER_PFP_KEY);
             if (image != null) {
-                Glide.with(this).load(image.getUrl()).into(ivProfilePic);
+                Glide.with(this).load(image.getUrl()).into(ivProfileProfilePic);
             }
             else{
-                Glide.with(this).load("https://placedog.net/500/500").into(ivProfilePic);
+                Glide.with(this).load("https://placedog.net/500/500").into(ivProfileProfilePic);
             }
 //            Drawable profilePic = Parcels.unwrap(data.getParcelableExtra("profilePic"));
 //            profilePic = data.getExtra;

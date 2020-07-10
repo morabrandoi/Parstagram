@@ -29,10 +29,10 @@
         android:text="Log Out"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/rvPosts"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic" />
+        app:layout_constraintStart_toEndOf="@+id/ivProfileProfilePic" />
 
     <ImageView
-        android:id="@+id/ivProfilePic"
+        android:id="@+id/ivProfileProfilePic"
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_marginStart="16dp"
@@ -48,7 +48,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintStart_toEndOf="@+id/ivProfileProfilePic"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="UserNameHere" />
 </androidx.constraintlayout.widget.ConstraintLayout>

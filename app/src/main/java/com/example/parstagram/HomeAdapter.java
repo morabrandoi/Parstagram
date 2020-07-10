@@ -65,8 +65,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         private TextView tvUsername;
         private TextView tvDescription;
         private ImageView ivPostImage;
+        private ImageView ivPostProfilePic;
         private LinearLayout llItem;
-        private ImageView ivProfilePic;
+
         private TextView tvTimeStamp;
 
         public ViewHolder(@NonNull View itemView) {
@@ -76,7 +77,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             ivPostImage = itemView.findViewById(R.id.ivPostImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             llItem = itemView.findViewById(R.id.llItem);
-            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            ivPostProfilePic = itemView.findViewById(R.id.ivPostProfilePic);
             tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
         }
 
@@ -85,6 +86,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             tvUsername.setText(post.getUser().getUsername());
             Date createdAt = post.getCreatedAt();
             tvTimeStamp.setText(createdAt.toString());
+
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivPostImage);
@@ -92,7 +94,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
             ParseFile profileImage = ParseUser.getCurrentUser().getParseFile(KEY_PROFILE_PIC);
             if (image != null) {
-                Glide.with(context).load(profileImage.getUrl()).into(ivProfilePic);
+                Glide.with(context).load(profileImage.getUrl()).into(ivPostProfilePic);
             }
 
             llItem.setOnClickListener(new View.OnClickListener() {

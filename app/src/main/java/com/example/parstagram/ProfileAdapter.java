@@ -1,7 +1,9 @@
 package com.example.parstagram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 import java.text.BreakIterator;
 import java.util.Date;
@@ -56,11 +60,21 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             ivThumbnail = itemView.findViewById(R.id.ivThumbnail);
         }
 
-        public void bind(Post post) {
+        public void bind(final Post post) {
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivThumbnail);
             }
+
+            ivThumbnail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, PostDetailActivity.class);
+                    Parcelable wrappedPost = Parcels.wrap(post);
+                    intent.putExtra("post", wrappedPost);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

@@ -22,7 +22,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView tvUsername;
     private TextView tvDescription;
     private TextView tvTimeStamp;
-    private ImageView ivImage;
+    private ImageView ivProfileProfilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvUsername = findViewById(R.id.tvUsername);
         tvDescription = findViewById(R.id.tvDescription);
         tvTimeStamp = findViewById(R.id.tvTimeStamp);
-        ivImage = findViewById(R.id.ivPostImage);
+        ivProfileProfilePic = findViewById(R.id.ivProfileProfilePic);
 
         tvUsername.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());
@@ -48,7 +48,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvTimeStamp.setText(createdAt.toString());
         ParseFile image = post.getImage();
         if (image != null) {
-            Glide.with(this).load(image.getUrl()).into(ivImage);
+            Glide.with(this).load(image.getUrl()).into(ivProfileProfilePic);
         }
     }
 }
