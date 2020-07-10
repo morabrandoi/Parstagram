@@ -32,7 +32,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.grid_cell, parent, false);
         return new ViewHolder(view);
     }
 
@@ -48,36 +48,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView tvUsername;
-        private TextView tvDescription;
-        private ImageView ivImage;
-        private ImageView ivProfilePic;
-        private TextView tvTimeStamp;
+        private ImageView ivThumbnail;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvUsername = itemView.findViewById(R.id.tvUsername);
-            ivImage = itemView.findViewById(R.id.ivPostImage);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
+            ivThumbnail = itemView.findViewById(R.id.ivThumbnail);
         }
 
         public void bind(Post post) {
-            tvDescription.setText(post.getDescription());
-            tvUsername.setText(post.getUser().getUsername());
-            Date createdAt = post.getCreatedAt();
-            tvTimeStamp.setText(createdAt.toString());
             ParseFile image = post.getImage();
             if (image != null) {
-                Glide.with(context).load(image.getUrl()).into(ivImage);
-            }
-
-            ParseFile profileImage = ParseUser.getCurrentUser().getParseFile(KEY_PROFILE_PIC);
-            if (image != null) {
-                Glide.with(context).load(profileImage.getUrl()).into(ivProfilePic);
+                Glide.with(context).load(image.getUrl()).into(ivThumbnail);
             }
         }
     }

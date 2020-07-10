@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +41,7 @@ public class ProfileFragment extends Fragment {
     public static final String TAG = "Profile";
     public static final String USER_PFP_KEY = "profilePicture";
     public static final int PROFILE_PIC_REQUEST_CODE = 23;
+    public static final int NUM_COLUMN = 3;
     private RecyclerView rvPosts;
     private Button btnLogOut;
     private ImageView ivProfilePic;
@@ -101,7 +103,7 @@ public class ProfileFragment extends Fragment {
         // Recycler View stuffs
         rvPosts = view.findViewById(R.id.rvPosts);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvPosts.setLayoutManager(new GridLayoutManager(getContext(), NUM_COLUMN));
         queryPosts();
     }
 
