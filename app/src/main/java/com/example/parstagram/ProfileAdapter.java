@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.text.BreakIterator;
+import java.util.Date;
 import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
@@ -51,6 +53,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         private TextView tvDescription;
         private ImageView ivImage;
         private ImageView ivProfilePic;
+        private TextView tvTimeStamp;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,11 +62,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             ivImage = itemView.findViewById(R.id.ivPostImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
         }
 
         public void bind(Post post) {
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
+            Date createdAt = post.getCreatedAt();
+            tvTimeStamp.setText(createdAt.toString());
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivImage);

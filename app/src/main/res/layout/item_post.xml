@@ -8,9 +8,10 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/middleLinLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/ivProfilePic"
@@ -41,5 +42,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         tools:text="Caption goes here" />
+
+    <TextView
+        android:id="@+id/tvTimeStamp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:textSize="10sp"
+        tools:text="TIMESTAMP EHRE" />
 
 </LinearLayout>

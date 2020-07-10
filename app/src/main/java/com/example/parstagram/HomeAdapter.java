@@ -19,6 +19,7 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
+import java.util.Date;
 import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
@@ -66,6 +67,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         private ImageView ivPostImage;
         private LinearLayout llItem;
         private ImageView ivProfilePic;
+        private TextView tvTimeStamp;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,11 +77,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             tvDescription = itemView.findViewById(R.id.tvDescription);
             llItem = itemView.findViewById(R.id.llItem);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
         }
 
         public void bind(final Post post) {
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
+            Date createdAt = post.getCreatedAt();
+            tvTimeStamp.setText(createdAt.toString());
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivPostImage);
