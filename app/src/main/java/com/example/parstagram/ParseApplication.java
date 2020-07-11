@@ -13,6 +13,7 @@ public class ParseApplication extends Application{
         // Register your parse models
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Comment.class);
+        ParseObject.registerSubclass(Like.class);
 //        // Add your initialization code here
 //        Parse.initialize(this, "7zBztvyG4hYQ9XghgfqYxfRcL3SMBYWAj0GUL", "iZWhgJRu6yKm3iNMbTaguLcNCV3qedijWL");
 

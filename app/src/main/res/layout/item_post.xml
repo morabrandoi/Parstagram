@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llItem"
     android:layout_width="match_parent"
@@ -53,13 +54,48 @@
         android:textColor="#000000"
         tools:text="Caption goes here" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iconHeart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ufi_heart" />
+
+        <ImageView
+            android:id="@+id/iconComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            app:srcCompat="@drawable/ufi_comment" />
+
+        <ImageView
+            android:id="@+id/iconShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            app:srcCompat="@drawable/ufi_new_direct" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingStart="256dp"
+            android:tint="#060303"
+            app:srcCompat="@drawable/ufi_save" />
+
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tvItemViewComments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="View comments..."
         android:textSize="12sp" />
-
 
 
 </LinearLayout>
