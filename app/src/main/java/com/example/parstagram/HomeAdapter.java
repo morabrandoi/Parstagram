@@ -1,7 +1,9 @@
 package com.example.parstagram;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,10 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import com.example.parstagram.fragments.ProfileFragment;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -78,8 +82,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         private ImageView ivPostProfilePic;
         private ImageView iconHeart;
         private LinearLayout llItem;
+        private LinearLayout llUserInfo;
         private TextView tvTimeStamp;
-        private Boolean isLiked = false;
+        private Boolean isLiked;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,6 +97,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             ivPostProfilePic = itemView.findViewById(R.id.ivPostProfilePic);
             tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
             iconHeart = itemView.findViewById(R.id.iconHeart);
+            llUserInfo = itemView.findViewById(R.id.lLuserInfo);
         }
 
         public void bind(final Post post) {
@@ -166,6 +172,18 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
                     }
 
+                }
+            });
+
+            llUserInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Fragment profile = new ProfileFragment();
+                    Bundle bundle = new Bundle();
+                    Parcelable wrappedUser = Parcels.wrap(post.getUser());
+                    bundle.putParcelable("user", wrappedUser);
+                    profile.setArguments(bundle);
+                    ((MainActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.flContainer, profile).commit();
                 }
             });
 

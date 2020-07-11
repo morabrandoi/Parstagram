@@ -31,6 +31,8 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,7 @@ public class ProfileFragment extends Fragment {
     private Button btnLogOut;
     private ImageView ivProfileProfilePic;
     private TextView tvUsername;
+    private ParseUser user;
     private ProfileAdapter adapter;
     private List<Post> allPosts;
 
@@ -55,6 +58,14 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Bundle args = getArguments();
+        if (args != null){
+            user = Parcels.unwrap(args.getParcelable("user"));
+        }
+        else{
+            user = ParseUser.getCurrentUser();
+        }
+
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
@@ -80,7 +91,6 @@ public class ProfileFragment extends Fragment {
 
         // Profile Pic
         ivProfileProfilePic = view.findViewById(R.id.ivProfileProfilePic);
-        ParseUser user = ParseUser.getCurrentUser();
         ParseFile image = user.getParseFile(USER_PFP_KEY);
         if (image != null) {
             Glide.with(this).load(image.getUrl()).into(ivProfileProfilePic);
@@ -114,7 +124,7 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PROFILE_PIC_REQUEST_CODE && resultCode == Activity.RESULT_OK)
         {
-            ParseUser user = ParseUser.getCurrentUser();
+//            ParseUser user = ParseUser.getCurrentUser();
             ParseFile image = user.getParseFile(USER_PFP_KEY);
             if (image != null) {
                 Glide.with(this).load(image.getUrl()).into(ivProfileProfilePic);
@@ -135,7 +145,7 @@ public class ProfileFragment extends Fragment {
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Post.KEY_USER, user);
         query.setLimit(20); // Number of posts to query at a time
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
