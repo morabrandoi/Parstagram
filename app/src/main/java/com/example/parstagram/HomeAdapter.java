@@ -94,7 +94,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 Glide.with(context).load(image.getUrl()).into(ivPostImage);
             }
 
-            ParseFile profileImage = ParseUser.getCurrentUser().getParseFile(KEY_PROFILE_PIC);
+            ParseFile profileImage = post.getUser().getParseFile(KEY_PROFILE_PIC);
             if (image != null) {
                 Glide.with(context).load(profileImage.getUrl()).into(ivPostProfilePic);
             }
