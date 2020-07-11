@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -34,7 +35,9 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView tvDetailViewComments;
     private ImageView ivProfileProfilePic;
     private ImageView iconHeart;
+    private TextView tvLikeCounter;
     private boolean isLiked;
+    private int likes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class PostDetailActivity extends AppCompatActivity {
         ivProfileProfilePic = findViewById(R.id.ivProfileProfilePic);
         tvDetailViewComments = findViewById(R.id.tvDetailViewComments);
         iconHeart = findViewById(R.id.iconHeart);
+        tvLikeCounter = findViewById(R.id.tvLikeCounter);
 
         Date createdAt = post.getCreatedAt();
         tvTimeStamp.setText(createdAt.toString());
@@ -76,31 +80,60 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        isLiked = false;
         updateIfLiked(post);
+        checkHowManyLikes(post);
+
         iconHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isLiked){
-                    Like like = new Like();
-                    like.setUser(ParseUser.getCurrentUser());
-                    like.setPostObj(post);
+                Log.i(TAG, "post: " + post.getDescription());
+                Log.i(TAG, "isLiked: " + isLiked);
+                if (isLiked) {
+                    isLiked = false;
                     iconHeart.setImageResource(R.drawable.ufi_heart);
-                    like.deleteInBackground(new DeleteCallback() {
+                    ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+                    query.include(Like.KEY_USER);
+                    query.include(Like.KEY_POST);
+                    query.whereEqualTo(Like.KEY_USER, ParseUser.getCurrentUser());
+                    query.whereEqualTo(Like.KEY_POST, post);
+                    query.getFirstInBackground(new GetCallback<Like>() {
                         @Override
-                        public void done(ParseException e) {
-                            iconHeart.setImageResource(R.drawable.ufi_heart);
+                        public void done(Like object, ParseException e) {
+                            if (e != null) {
+                                iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                                Log.e(TAG, "Couldn't find that object (very bad)", e);
+                                return;
+                            }
+                            object.deleteInBackground(new DeleteCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e != null) {
+                                        iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                                        Log.e(TAG, "Why is delete not working", e);
+                                        isLiked = true;
+                                    }
+                                    Log.i(TAG, "delete worked I guess");
+
+                                    updateLikes(-1);
+                                }
+                            });
                         }
                     });
                 } else {
+                    isLiked = true;
                     Like like = new Like();
                     like.setUser(ParseUser.getCurrentUser());
                     like.setPostObj(post);
                     iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                    Log.i(TAG, "Save getting executed");
                     like.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                            if (e != null) {
+                                isLiked = false;
+                                iconHeart.setImageResource(R.drawable.ufi_heart);
+                            }
+                            updateLikes(1);
                         }
                     });
 
@@ -108,31 +141,52 @@ public class PostDetailActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
-    private void updateIfLiked(Post post) {
+    private void checkHowManyLikes(final Post post) {
+        ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+        query.include(Like.KEY_POST);
+        query.whereEqualTo(Like.KEY_POST, post);
+        query.findInBackground(new FindCallback<Like>() {
+            @Override
+            public void done(List<Like> objects, ParseException e) {
+                likes = objects.size();
+                updateLikes(0);
+            }
+        });
+    }
+
+    private void updateLikes(int change){
+        likes += change;
+        tvLikeCounter.setText("" + likes);
+    }
+
+    private void updateIfLiked(final Post post) {
         ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
         query.include(Like.KEY_USER);
         query.include(Like.KEY_POST);
         query.whereEqualTo(Like.KEY_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(Like.KEY_POST, post);
-        query.findInBackground(new FindCallback<Like>() {
+        query.getFirstInBackground(new GetCallback<Like>() {
             @Override
-            public void done(List<Like> likes, ParseException e) {
+            public void done(Like object, ParseException e) {
                 if (e != null) {
+                    Log.i(TAG, "post caption : " + post.getDescription());
                     Log.e(TAG, "Issue with getting likes", e);
+                    isLiked = false;
                     return;
-                }
-                isLiked = likes.size() > 0;
-                if (isLiked) {
-                    iconHeart.setImageResource(R.drawable.ufi_heart_active);
-                }
-                else{
-                    iconHeart.setImageResource(R.drawable.ufi_heart);
+                } else {
+                    isLiked = true;
                 }
 
+
+                if (isLiked) {
+                    iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                } else {
+                    iconHeart.setImageResource(R.drawable.ufi_heart);
+                }
             }
         });
+
     }
 }

@@ -65,6 +65,13 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ufi_heart" />
 
+        <TextView
+            android:id="@+id/tvLikeCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dp"
+            android:text="-1" />
+
         <ImageView
             android:id="@+id/iconComment"
             android:layout_width="wrap_content"

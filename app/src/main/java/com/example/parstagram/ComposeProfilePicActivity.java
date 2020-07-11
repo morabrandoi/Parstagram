@@ -38,7 +38,7 @@ public class ComposeProfilePicActivity extends AppCompatActivity {
     private Button btnCaptureImage;
     private Button btnChooseImage;
     private Button btnDone;
-    private ImageView ivProfilePic;
+    private ImageView ivProfileProfilePic;
     private TextView tvAddImage;
 
     @Override
@@ -49,7 +49,7 @@ public class ComposeProfilePicActivity extends AppCompatActivity {
         btnCaptureImage = findViewById(R.id.btnCaptureImage);
         btnChooseImage = findViewById(R.id.btnChooseImage);
         btnDone = findViewById(R.id.btnDone);
-        ivProfilePic = findViewById(R.id.ivPostImage);
+        ivProfileProfilePic = findViewById(R.id.ivProfileProfilePic);
         tvAddImage = findViewById(R.id.tvAddImage);
 
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +61,7 @@ public class ComposeProfilePicActivity extends AppCompatActivity {
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (photoFile == null || ivProfilePic.getDrawable() == null){
+                if (photoFile == null || ivProfileProfilePic.getDrawable() == null){
                     Toast.makeText(ComposeProfilePicActivity.this, "There is no image!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -103,8 +103,8 @@ public class ComposeProfilePicActivity extends AppCompatActivity {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // Load the taken image into a preview
                 bitmapProfilePic = takenImage;
-                ivProfilePic.setImageBitmap(takenImage);
-                ivProfilePic.setVisibility(View.VISIBLE);
+                ivProfileProfilePic.setImageBitmap(takenImage);
+                ivProfileProfilePic.setVisibility(View.VISIBLE);
                 tvAddImage.setVisibility(View.GONE);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
@@ -140,7 +140,7 @@ public class ComposeProfilePicActivity extends AppCompatActivity {
                     return ;
                 }
                 Log.i(TAG, "Post save was successful!");
-                ivProfilePic.setImageResource(0);
+                ivProfileProfilePic.setImageResource(0);
             }
         });
     }

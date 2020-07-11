@@ -80,6 +80,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         private TextView tvUsername;
         private TextView tvDescription;
         private TextView tvItemViewComments;
+        private TextView tvLikeCounter;
         private ImageView ivPostImage;
         private ImageView ivPostProfilePic;
         private ImageView iconHeart;
@@ -87,6 +88,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         private LinearLayout llUserInfo;
         private TextView tvTimeStamp;
         private Boolean isLiked;
+        private int likes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,6 +102,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
             iconHeart = itemView.findViewById(R.id.iconHeart);
             llUserInfo = itemView.findViewById(R.id.lLuserInfo);
+            tvLikeCounter = itemView.findViewById(R.id.tvLikeCounter);
         }
 
         public void bind(final Post post) {
@@ -138,9 +141,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 }
             });
 
+            llUserInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Fragment profile = new ProfileFragment();
+                    Bundle bundle = new Bundle();
+                    Parcelable wrappedUser = Parcels.wrap(post.getUser());
+                    bundle.putParcelable("user", wrappedUser);
+                    profile.setArguments(bundle);
+                    ((MainActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.flContainer, profile).commit();
+                }
+            });
 
-//            isLiked = false;
             updateIfLiked(post);
+            checkHowManyLikes(post);
 
             iconHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -149,6 +163,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                     Log.i(TAG, "isLiked: " + isLiked);
                     if (isLiked) {
                         isLiked = false;
+                        iconHeart.setImageResource(R.drawable.ufi_heart);
                         ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
                         query.include(Like.KEY_USER);
                         query.include(Like.KEY_POST);
@@ -158,6 +173,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                            @Override
                            public void done(Like object, ParseException e) {
                                if (e != null) {
+                                   iconHeart.setImageResource(R.drawable.ufi_heart_active);
                                    Log.e(TAG, "Couldn't find that object (very bad)", e);
                                    return;
                                }
@@ -170,7 +186,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                                            isLiked = true;
                                        }
                                        Log.i(TAG, "delete worked I guess");
-                                       iconHeart.setImageResource(R.drawable.ufi_heart);
+
+                                       updateLikes(-1);
                                    }
                                });
                            }
@@ -189,6 +206,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                                     isLiked = false;
                                     iconHeart.setImageResource(R.drawable.ufi_heart);
                                 }
+                                updateLikes(1);
                             }
                         });
 
@@ -196,19 +214,24 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
                 }
             });
+        }
 
-            llUserInfo.setOnClickListener(new View.OnClickListener() {
+        private void checkHowManyLikes(final Post post) {
+            ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+            query.include(Like.KEY_POST);
+            query.whereEqualTo(Like.KEY_POST, post);
+            query.findInBackground(new FindCallback<Like>() {
                 @Override
-                public void onClick(View view) {
-                    Fragment profile = new ProfileFragment();
-                    Bundle bundle = new Bundle();
-                    Parcelable wrappedUser = Parcels.wrap(post.getUser());
-                    bundle.putParcelable("user", wrappedUser);
-                    profile.setArguments(bundle);
-                    ((MainActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.flContainer, profile).commit();
+                public void done(List<Like> objects, ParseException e) {
+                    likes = objects.size();
+                    updateLikes(0);
                 }
             });
+        }
 
+        private void updateLikes(int change){
+            likes += change;
+            tvLikeCounter.setText("" + likes);
         }
 
         private void updateIfLiked(final Post post) {

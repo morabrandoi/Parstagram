@@ -138,7 +138,10 @@ public class ProfileFragment extends Fragment {
 //            ivProfilePic.setImageBitmap(profilePic);
         }
         else {
-            Toast.makeText(getActivity(), "DEAR GOD I HOPE I DONT SEE THIS", Toast.LENGTH_SHORT).show();
+            ParseFile image = user.getParseFile(USER_PFP_KEY);
+            if (image != null) {
+                Glide.with(this).load(image.getUrl()).into(ivProfileProfilePic);
+            }
         }
     }
 
