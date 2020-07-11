@@ -46,7 +46,7 @@ public class ComposeFragment extends Fragment {
     private String photoFileName = "photo.jpg";
     private Button btnCaptureImage;
     private EditText etDescription;
-    private ImageView ivPostImage;
+    private ImageView ivProfileProfilePic;
     private Button btnSubmit;
     private File photoFile;
 
@@ -66,7 +66,7 @@ public class ComposeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         etDescription = view.findViewById(R.id.etDescription);
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
-        ivPostImage = view.findViewById(R.id.ivPostImage);
+        ivProfileProfilePic = view.findViewById(R.id.ivProfileProfilePic);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +83,7 @@ public class ComposeFragment extends Fragment {
                     Toast.makeText(getContext(), "Description can't be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (photoFile == null || ivPostImage.getDrawable() == null){
+                if (photoFile == null || ivProfileProfilePic.getDrawable() == null){
                     Toast.makeText(getContext(), "There is no image!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -122,8 +122,8 @@ public class ComposeFragment extends Fragment {
                 // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // Load the taken image into a preview
-                ivPostImage.setImageBitmap(takenImage);
-                ivPostImage.setVisibility(ImageView.VISIBLE);
+                ivProfileProfilePic.setImageBitmap(takenImage);
+                ivProfileProfilePic.setVisibility(ImageView.VISIBLE);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -163,7 +163,7 @@ public class ComposeFragment extends Fragment {
                 }
                 Log.i(TAG, "Post save was successful!");
                 etDescription.setText("");
-                ivPostImage.setImageResource(0);
+                ivProfileProfilePic.setImageResource(0);
             }
         });
     }

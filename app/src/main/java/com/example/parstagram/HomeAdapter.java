@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -118,8 +119,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                     context.startActivity(intent);
                 }
             });
-
-
         }
     }
 }
