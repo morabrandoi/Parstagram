@@ -36,5 +36,13 @@
         android:layout_margin="8dp"
         tools:text="Caption goes here" />
 
+    <TextView
+        android:id="@+id/tvDetailViewComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View comments..."
+        android:textSize="10sp" />
+
+
 
 </LinearLayout>

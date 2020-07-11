@@ -64,6 +64,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         private TextView tvUsername;
         private TextView tvDescription;
+        private TextView tvItemViewComments;
         private ImageView ivPostImage;
         private ImageView ivPostProfilePic;
         private LinearLayout llItem;
@@ -74,6 +75,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             super(itemView);
 
             tvUsername = itemView.findViewById(R.id.tvUsername);
+            tvItemViewComments = itemView.findViewById(R.id.tvItemViewComments);
             ivPostImage = itemView.findViewById(R.id.ivPostImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             llItem = itemView.findViewById(R.id.llItem);
@@ -82,10 +84,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         }
 
         public void bind(final Post post) {
-            tvDescription.setText(post.getDescription());
-            tvUsername.setText(post.getUser().getUsername());
             Date createdAt = post.getCreatedAt();
             tvTimeStamp.setText(createdAt.toString());
+            tvDescription.setText(post.getDescription());
+            tvUsername.setText(post.getUser().getUsername());
 
             ParseFile image = post.getImage();
             if (image != null) {
@@ -101,6 +103,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PostDetailActivity.class);
+                    Parcelable wrappedPost = Parcels.wrap(post);
+                    intent.putExtra("post", wrappedPost);
+                    context.startActivity(intent);
+                }
+            });
+
+            tvItemViewComments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ComposeCommentActivity.class);
                     Parcelable wrappedPost = Parcels.wrap(post);
                     intent.putExtra("post", wrappedPost);
                     context.startActivity(intent);

@@ -29,6 +29,14 @@
             tools:text="Username" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvTimeStamp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:textSize="10sp"
+        tools:text="TIMESTAMP EHRE" />
+
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
@@ -44,11 +52,12 @@
         tools:text="Caption goes here" />
 
     <TextView
-        android:id="@+id/tvTimeStamp"
+        android:id="@+id/tvItemViewComments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:textSize="10sp"
-        tools:text="TIMESTAMP EHRE" />
+        android:text="View comments..."
+        android:textSize="10sp" />
+
+
 
 </LinearLayout>

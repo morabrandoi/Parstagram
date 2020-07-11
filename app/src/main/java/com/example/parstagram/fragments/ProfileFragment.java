@@ -114,7 +114,6 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PROFILE_PIC_REQUEST_CODE && resultCode == Activity.RESULT_OK)
         {
-
             ParseUser user = ParseUser.getCurrentUser();
             ParseFile image = user.getParseFile(USER_PFP_KEY);
             if (image != null) {
@@ -127,12 +126,10 @@ public class ProfileFragment extends Fragment {
 //            profilePic = data.getExtra;
 //                    BitmapDrawable
 //            ivProfilePic.setImageBitmap(profilePic);
-
         }
         else {
             Toast.makeText(getActivity(), "DEAR GOD I HOPE I DONT SEE THIS", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void queryPosts() {
@@ -156,6 +153,4 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-
 }
