@@ -3,6 +3,7 @@ package com.example.parstagram;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.example.parstagram.fragments.ProfileFragment;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -137,36 +139,56 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             });
 
 
-            isLiked = false;
-            checkIfLiked(post);
-            if (isLiked) {
-                iconHeart.setImageResource(R.drawable.ufi_heart_active);
-            }
-            else{
-                iconHeart.setImageResource(R.drawable.ufi_heart);
-            }
+//            isLiked = false;
+            updateIfLiked(post);
 
             iconHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isLiked){
-                        Like like = new Like();
-                        like.setUser(ParseUser.getCurrentUser());
-                        like.setPostObj(post);
-                        like.deleteInBackground(new DeleteCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                iconHeart.setImageResource(R.drawable.ufi_heart);
-                            }
+                    Log.i(TAG, "post: " + post.getDescription());
+                    Log.i(TAG, "isLiked: " + isLiked);
+                    if (isLiked) {
+                        isLiked = false;
+                        ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+                        query.include(Like.KEY_USER);
+                        query.include(Like.KEY_POST);
+                        query.whereEqualTo(Like.KEY_USER, ParseUser.getCurrentUser());
+                        query.whereEqualTo(Like.KEY_POST, post);
+                        query.getFirstInBackground(new GetCallback<Like>() {
+                           @Override
+                           public void done(Like object, ParseException e) {
+                               if (e != null) {
+                                   Log.e(TAG, "Couldn't find that object (very bad)", e);
+                                   return;
+                               }
+                               object.deleteInBackground(new DeleteCallback() {
+                                   @Override
+                                   public void done(ParseException e) {
+                                       if (e != null) {
+                                           iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                                           Log.e(TAG, "Why is delete not working", e);
+                                           isLiked = true;
+                                       }
+                                       Log.i(TAG, "delete worked I guess");
+                                       iconHeart.setImageResource(R.drawable.ufi_heart);
+                                   }
+                               });
+                           }
                         });
                     } else {
+                        isLiked = true;
                         Like like = new Like();
                         like.setUser(ParseUser.getCurrentUser());
                         like.setPostObj(post);
+                        iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                        Log.i(TAG, "Save getting executed");
                         like.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                                if (e != null) {
+                                    isLiked = false;
+                                    iconHeart.setImageResource(R.drawable.ufi_heart);
+                                }
                             }
                         });
 
@@ -189,22 +211,33 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         }
 
-        private void checkIfLiked(Post post) {
+        private void updateIfLiked(final Post post) {
             ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
             query.include(Like.KEY_USER);
+            query.include(Like.KEY_POST);
             query.whereEqualTo(Like.KEY_USER, ParseUser.getCurrentUser());
             query.whereEqualTo(Like.KEY_POST, post);
-            query.findInBackground(new FindCallback<Like>() {
+            query.getFirstInBackground(new GetCallback<Like>() {
                 @Override
-                public void done(List<Like> likes, ParseException e) {
+                public void done(Like object, ParseException e) {
                     if (e != null) {
+                        Log.i(TAG, "post caption : " + post.getDescription());
                         Log.e(TAG, "Issue with getting likes", e);
-                        isLiked = likes.size() > 0;
+                        isLiked = false;
                         return;
+                    } else {
+                        isLiked = true;
                     }
 
+
+                    if (isLiked) {
+                        iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                    } else {
+                        iconHeart.setImageResource(R.drawable.ufi_heart);
+                    }
                 }
             });
+
         }
     }
 }

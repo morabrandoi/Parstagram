@@ -77,14 +77,7 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         isLiked = false;
-        checkIfLiked(post);
-        if (isLiked) {
-            iconHeart.setImageResource(R.drawable.ufi_heart_active);
-        }
-        else{
-            iconHeart.setImageResource(R.drawable.ufi_heart);
-        }
-
+        updateIfLiked(post);
         iconHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,6 +85,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     Like like = new Like();
                     like.setUser(ParseUser.getCurrentUser());
                     like.setPostObj(post);
+                    iconHeart.setImageResource(R.drawable.ufi_heart);
                     like.deleteInBackground(new DeleteCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -102,6 +96,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     Like like = new Like();
                     like.setUser(ParseUser.getCurrentUser());
                     like.setPostObj(post);
+                    iconHeart.setImageResource(R.drawable.ufi_heart_active);
                     like.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -116,9 +111,10 @@ public class PostDetailActivity extends AppCompatActivity {
 
     }
 
-    private void checkIfLiked(Post post) {
+    private void updateIfLiked(Post post) {
         ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
         query.include(Like.KEY_USER);
+        query.include(Like.KEY_POST);
         query.whereEqualTo(Like.KEY_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(Like.KEY_POST, post);
         query.findInBackground(new FindCallback<Like>() {
@@ -126,8 +122,14 @@ public class PostDetailActivity extends AppCompatActivity {
             public void done(List<Like> likes, ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Issue with getting likes", e);
-                    isLiked = likes.size() > 0;
                     return;
+                }
+                isLiked = likes.size() > 0;
+                if (isLiked) {
+                    iconHeart.setImageResource(R.drawable.ufi_heart_active);
+                }
+                else{
+                    iconHeart.setImageResource(R.drawable.ufi_heart);
                 }
 
             }
